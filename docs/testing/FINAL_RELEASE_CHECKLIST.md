@@ -1,8 +1,8 @@
-# Final release checklist
+# Release evidence checklist
 
-Code-under-test: `d320eee` on `test/full-platform-hardening`. This checklist records local/isolated evidence, not hosted-production approval.
+Historical code-under-test: `d320eee` on `test/full-platform-hardening`. The passed items below preserve local/isolated evidence from that exact historical review; they are not automatically valid for later commits and do not constitute hosted-production approval.
 
-## Passed
+## Historical isolated evidence at `d320eee`
 
 - [x] Clean baseline inspected; no unrelated source changes overwritten.
 - [x] Content validator and seven validator tests pass.
@@ -22,6 +22,23 @@ Code-under-test: `d320eee` on `test/full-platform-hardening`. This checklist rec
 - [x] Pinned Gitleaks scan reports no leaks across the complete Git history.
 - [x] Retention CLI is dry-run first and deletion/cascade is regression-tested.
 - [x] CI builds the real production frontend image.
+
+## Current portfolio-upgrade evidence (2026-08-09)
+
+- [x] Academy content validator passes with 12 paths, 4 active paths, 32 lessons and 6 classroom activities.
+- [x] All 8 content-validator regression tests pass, including canonical classroom activity-type validation.
+- [x] Targeted classroom API tests pass: 8 tests, including activity type/ID mismatch rejection.
+- [x] Complete SQLite backend suite passes: 38 tests, 2 expected PostgreSQL-profile skips, 87% coverage; Ruff formatting/lint and mypy pass on Python 3.12.13.
+- [x] Frontend lint and typecheck pass.
+- [x] Frontend coverage passes: 38 tests, 91.45% statements and 93.4% lines.
+- [x] Strict 37-route frontend build passes.
+- [x] Full and production-only npm audits report zero vulnerabilities.
+- [x] Focused catalogue regression passes in desktop and mobile Chromium: four active links, eight non-interactive roadmap cards, correct numbering and zero browser-console errors.
+- [x] Disposable PostgreSQL 16/RLS profile rebuilt from the Alpine test target and passes: 2 integration tests, with its containers and network removed afterward.
+- [x] Production frontend and backend Docker images build and answer HTTP health smokes as UID/GID `10001:10001`.
+- [x] Docker Scout reports 0 critical, high, medium or low findings for the final frontend (`9353c17a978a`) and backend (`c7caaacb733b`) images. The backend moved from Debian slim to the supported Python Alpine variant after the Debian image exposed four unfixed Perl findings in an unused runtime package.
+- [ ] The complete Windows dev-server E2E run is partial evidence only: 26 passed, 13 failed on cold-loading/localized-copy timing, and 1 skipped. Require the Linux pull-request gate, which runs one worker with retries, before preview approval.
+- [ ] Run hosted authentication, persistence, accessibility and performance flows on the exact pull-request head before changing release status. Local performance automation could not be completed because the existing Windows wrapper depends on the removed `wmic.exe` command.
 
 ## Preview evidence
 
@@ -52,4 +69,4 @@ Code-under-test: `d320eee` on `test/full-platform-hardening`. This checklist rec
 
 ## Decision
 
-**READY FOR PREVIEW.** No critical or high finding remains open. Do not call this production-ready: live authentication, hosted migration/grants, backups, monitoring, distributed limits, retention operations, CSP and assistive-technology evidence are still required. A controlled pilot is conditional on completing the pilot checklist above.
+**NOT PRODUCTION-READY.** The portfolio-upgrade working tree fixes the confirmed catalogue and classroom-integrity defects, passes local backend/frontend/build/database gates, and has clean npm and final-image advisory results. The full browser suite remains partial on this Windows host, and hosted authentication, persistence, accessibility, performance and data-operations evidence has not been repeated on the pull-request head. Preview eligibility must be established by that commit's CI and preview checks. A controlled pilot remains conditional on completing every unchecked pilot item above.

@@ -38,6 +38,15 @@ EXPECTED_ACTIVE_PATH_IDS = {
     "path-technical-analysis",
     "path-risk-management",
 }
+CLASSROOM_ACTIVITY_TYPES = {
+    "life_simulator",
+    "scam_detector",
+    "decision_lab",
+    "risk_case",
+    "budgeting",
+    "credit_comparison",
+    "inflation_interest",
+}
 EXPECTED_QUESTION_TYPES = {
     "single_choice",
     "multiple_choice",
@@ -762,6 +771,16 @@ def validate_registry(root: str | Path) -> dict[str, int]:
             localized(option.get("label"), f"{label}.{option_id}.label")
             localized(option.get("feedback"), f"{label}.{option_id}.feedback")
         check("strong" in qualities and qualities & {"weak", "dangerous"}, f"{label} must contrast strong and weak reasoning")
+
+    for activity_id, activity in classroom_activity_by_id.items():
+        label = f"classroom activity {activity_id}"
+        nonempty_string(activity.get("version"), f"{label}.version")
+        check(
+            activity.get("activity_type") in CLASSROOM_ACTIVITY_TYPES,
+            f"{label}.activity_type is invalid",
+        )
+        localized(activity.get("title"), f"{label}.title")
+        localized(activity.get("summary"), f"{label}.summary")
 
     check(isinstance(life_scenario, dict), "life simulator scenario must be an object")
     life_profiles: list[Any] = []

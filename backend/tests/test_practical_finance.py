@@ -126,6 +126,19 @@ def test_teacher_code_join_response_aggregate_and_owner_boundary(
     )
     assert denied.status_code == 403
 
+    mismatched = client.post(
+        "/api/v1/teacher/classrooms",
+        headers=teacher_auth_headers,
+        json={
+            "activity_type": "scam_detector",
+            "activity_id": "credit-total-cost",
+            "content_version": "1.0",
+            "duration_minutes": 45,
+        },
+    )
+    assert mismatched.status_code == 422
+    assert mismatched.json()["detail"] == "Classroom activity type does not match."
+
     created = client.post(
         "/api/v1/teacher/classrooms",
         headers=teacher_auth_headers,
@@ -139,6 +152,8 @@ def test_teacher_code_join_response_aggregate_and_owner_boundary(
     )
     assert created.status_code == 201
     classroom = created.json()
+    assert classroom["activity_type"] == "credit_comparison"
+    assert classroom["content_version"] == "1.0"
     assert len(classroom["classroom_code"]) == 7
 
     joined = client.post(

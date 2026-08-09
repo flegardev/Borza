@@ -211,3 +211,16 @@ Deploy migration first, then API, then frontend. See `PRODUCTION_RUNBOOK.md`. Th
 - No profitability claim or trading-guru language.
 - No university affiliation, endorsement, or unlicensed logo use.
 - The separate `premium/ai-trading-bot/` packaging area is not part of the Academy runtime.
+
+## Author
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/brand/tini-flegar-profile-dark.png">
+  <img src="docs/brand/tini-flegar-profile-light.png" alt="Tini Flegar monogram" width="96">
+</picture>
+
+**Tini Flegar**
+
+Full-Stack Developer · IT & Finance
+
+[flegardev@gmail.com](mailto:flegardev@gmail.com) · [GitHub](https://github.com/flegardev)

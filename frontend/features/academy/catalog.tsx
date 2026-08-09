@@ -14,19 +14,14 @@ import { DegradedState, Skeleton } from "@/components/ui";
 import { useDemoWorkspace } from "@/features/demo/demo-workspace-provider";
 import { usePreferences } from "@/features/preferences";
 import { DEMO_MODULES } from "@/lib/demo-academy";
+import { partitionCataloguePaths } from "./catalog-paths";
 import { useLearningPaths } from "./use-academy-content";
 
 export function CourseCatalogue() {
   const { dictionary, language } = usePreferences();
   const { state } = useDemoWorkspace();
   const { paths, isLoading, error, usingFallback } = useLearningPaths();
-  const orderedPaths = [...paths].sort((a, b) =>
-    a.id === "path-risk-management"
-      ? -1
-      : b.id === "path-risk-management"
-        ? 1
-        : 0,
-  );
+  const { activePaths, roadmapPaths } = partitionCataloguePaths(paths);
   const flagship = {
     de: "Flaggschiff",
     sl: "Osrednja pot",
@@ -51,14 +46,14 @@ export function CourseCatalogue() {
         className="grid gap-4 md:grid-cols-2"
         aria-label={dictionary.learn.activePaths}
       >
-        {orderedPaths.map((path, index) => (
+        {activePaths.map((path, index) => (
           <article
             key={path.id}
             className={`rounded-[var(--radius-md)] border bg-[var(--surface-1)] p-6 ${path.id === "path-risk-management" ? "border-[var(--brand)] shadow-[var(--shadow-card)]" : "border-[var(--border-subtle)]"}`}
           >
             <div className="flex items-center justify-between">
               <span className="numeric text-xs text-[var(--text-tertiary)]">
-                0{index + 1}
+                {String(index + 1).padStart(2, "0")}
               </span>
               <span className="rounded-full bg-[var(--brand-soft)] px-2.5 py-1 text-xs font-semibold text-[var(--brand)]">
                 {path.id === "path-risk-management"
@@ -101,6 +96,49 @@ export function CourseCatalogue() {
           </article>
         ))}
       </section>
+      {roadmapPaths.length ? (
+        <section
+          className="mt-8 rounded-[var(--radius-lg)] border border-[var(--border-subtle)] bg-[var(--background-raised)] p-5 sm:p-8"
+          aria-label={dictionary.learn.roadmap}
+        >
+          <div className="flex items-start gap-3">
+            <span className="grid size-10 shrink-0 place-items-center rounded-full bg-[var(--surface-2)] text-[var(--text-tertiary)]">
+              <LockKeyhole aria-hidden="true" size={18} />
+            </span>
+            <div>
+              <h2 className="text-xl font-semibold">
+                {dictionary.learn.roadmap}
+              </h2>
+              <p className="mt-1 text-sm leading-6 text-[var(--text-secondary)]">
+                {dictionary.learn.roadmapIntro}
+              </p>
+            </div>
+          </div>
+          <div className="mt-6 grid gap-3 md:grid-cols-2">
+            {roadmapPaths.map((path, index) => (
+              <article
+                key={path.id}
+                className="rounded-[var(--radius-md)] border border-[var(--border-subtle)] bg-[var(--surface-1)] p-5"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <span className="numeric text-xs text-[var(--text-tertiary)]">
+                    {String(activePaths.length + index + 1).padStart(2, "0")}
+                  </span>
+                  <span className="rounded-full border border-[var(--border-subtle)] px-2.5 py-1 text-xs font-semibold text-[var(--text-secondary)]">
+                    {dictionary.learn.planned}
+                  </span>
+                </div>
+                <h3 className="mt-4 text-lg font-semibold">
+                  {path.title[language]}
+                </h3>
+                <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
+                  {path.summary[language]}
+                </p>
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : null}
       <section className="mt-8 rounded-[var(--radius-lg)] border border-[var(--border-subtle)] bg-[var(--background-raised)] p-5 sm:p-8">
         <div className="flex items-center gap-3">
           <Route aria-hidden="true" className="text-[var(--electric)]" />

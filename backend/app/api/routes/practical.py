@@ -422,7 +422,13 @@ def create_classroom(
     activity = registry.classroom_activity_by_id(request.activity_id)
     if activity is None:
         raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "Classroom activity not found.")
-    if str(activity.get("version")) != request.content_version:
+    canonical_activity_type = str(activity.get("activity_type") or "")
+    canonical_content_version = str(activity.get("version") or "")
+    if canonical_activity_type != request.activity_type:
+        raise HTTPException(
+            status.HTTP_422_UNPROCESSABLE_CONTENT, "Classroom activity type does not match."
+        )
+    if canonical_content_version != request.content_version:
         raise HTTPException(
             status.HTTP_422_UNPROCESSABLE_CONTENT, "Classroom content version does not match."
         )
@@ -430,9 +436,9 @@ def create_classroom(
     classroom = ClassroomSession(
         teacher_user_id=user.id,
         code_hash=hash_classroom_secret(code, settings, purpose="classroom-code"),
-        activity_type=request.activity_type,
+        activity_type=canonical_activity_type,
         activity_id=request.activity_id,
-        content_version=request.content_version,
+        content_version=canonical_content_version,
         duration_minutes=request.duration_minutes,
         status="active",
         settings=request.settings.model_dump(),

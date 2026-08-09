@@ -255,18 +255,7 @@ export function TeacherDashboard() {
         const created = await academyApi<RemoteCreated>("/teacher/classrooms", {
           method: "POST",
           body: {
-            activity_type:
-              activity.kind === "life-simulator"
-                ? "life_simulator"
-                : activity.kind === "scam-detector"
-                  ? "scam_detector"
-                  : activity.kind === "decision-lab"
-                    ? "decision_lab"
-                    : activity.id.includes("credit")
-                      ? "credit_comparison"
-                      : activity.id.includes("inflation")
-                        ? "inflation_interest"
-                        : "risk_case",
+            activity_type: activity.activity_type,
             activity_id: activity.id,
             content_version: activity.version,
             duration_minutes: duration,
