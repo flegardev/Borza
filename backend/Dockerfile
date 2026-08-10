@@ -1,4 +1,4 @@
-FROM python:3.12-slim AS builder
+FROM python:3.12-alpine AS builder
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PIP_NO_CACHE_DIR=1 \
@@ -27,15 +27,15 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 CMD ["python", "-m", "pytest"]
 
-FROM python:3.12-slim AS runtime
+FROM python:3.12-alpine AS runtime
 
 ENV PATH="/opt/venv/bin:$PATH" \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     ENVIRONMENT=production
 
-RUN groupadd --system --gid 10001 borza \
-    && useradd --system --uid 10001 --gid borza --home-dir /app borza
+RUN addgroup -S -g 10001 borza \
+    && adduser -S -D -H -u 10001 -G borza borza
 
 WORKDIR /app
 COPY --from=builder /opt/venv /opt/venv

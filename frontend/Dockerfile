@@ -29,7 +29,11 @@ ENV NODE_ENV=production \
     PORT=3000
 
 RUN addgroup --system --gid 10001 borza \
-    && adduser --system --uid 10001 --ingroup borza borza
+    && adduser --system --uid 10001 --ingroup borza borza \
+    && rm -rf /usr/local/lib/node_modules/npm \
+    && rm -f /usr/local/bin/npm /usr/local/bin/npx \
+        /usr/local/bin/corepack /usr/local/bin/yarn /usr/local/bin/yarnpkg \
+        /usr/local/bin/pnpm /usr/local/bin/pnpx
 
 COPY --from=build --chown=borza:borza /app/frontend/.next/standalone /app
 COPY --from=build --chown=borza:borza /app/frontend/public ./public

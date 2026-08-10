@@ -6,6 +6,18 @@ from typing import Any
 
 from app.core.config import get_settings
 
+CLASSROOM_ACTIVITY_TYPES = frozenset(
+    {
+        "life_simulator",
+        "scam_detector",
+        "decision_lab",
+        "risk_case",
+        "budgeting",
+        "credit_comparison",
+        "inflation_interest",
+    }
+)
+
 
 class ContentRegistryError(RuntimeError):
     """Raised when version-controlled Academy content is missing or inconsistent."""
@@ -236,6 +248,10 @@ class AcademyRegistry:
             lesson_id = str(question.get("lesson_id") or "")
             if lesson_id and lesson_id not in lesson_ids:
                 issues.append(f"{question.get('id')} references unknown lesson {lesson_id}")
+        for activity in self.classroom_activities:
+            activity_id = str(activity.get("id") or "classroom activity")
+            if activity.get("activity_type") not in CLASSROOM_ACTIVITY_TYPES:
+                issues.append(f"{activity_id} has an invalid classroom activity type")
         return issues
 
 

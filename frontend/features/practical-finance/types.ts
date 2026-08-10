@@ -114,6 +114,14 @@ export type ClassroomActivity = {
   id: string;
   version: string;
   kind: string;
+  activity_type:
+    | "life_simulator"
+    | "scam_detector"
+    | "decision_lab"
+    | "risk_case"
+    | "budgeting"
+    | "credit_comparison"
+    | "inflation_interest";
   duration_options: number[];
   recommended_age: string;
   title: LocalizedText;

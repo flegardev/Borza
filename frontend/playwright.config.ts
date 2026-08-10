@@ -34,7 +34,7 @@ export default defineConfig({
           NEXT_PUBLIC_API_URL: "http://localhost:8000",
           BORZA_STRICT_PUBLIC_ENV: "false",
         },
-        reuseExistingServer: true,
+        reuseExistingServer: process.env.PLAYWRIGHT_REUSE_SERVER === "true",
         timeout: 120_000,
       },
 });

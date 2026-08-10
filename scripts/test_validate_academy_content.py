@@ -115,6 +115,14 @@ class AcademyContentValidationTests(unittest.TestCase):
         with self.assertRaisesRegex(ContentValidationError, "contrast strong and weak"):
             validate_registry(self.content_root)
 
+    def test_classroom_activities_require_a_canonical_activity_type(self) -> None:
+        payload = self.read_json("classroom_activities.json")
+        payload["activities"][0]["activity_type"] = "client_guess"
+        self.write_json("classroom_activities.json", payload)
+
+        with self.assertRaisesRegex(ContentValidationError, "activity_type is invalid"):
+            validate_registry(self.content_root)
+
 
 if __name__ == "__main__":
     unittest.main()

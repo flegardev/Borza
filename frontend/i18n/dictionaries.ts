@@ -108,6 +108,9 @@ export type AcademyDictionary = {
     title: string;
     intro: string;
     activePaths: string;
+    roadmap: string;
+    roadmapIntro: string;
+    planned: string;
     skillMap: string;
     available: string;
     current: string;
@@ -369,6 +372,10 @@ const de: AcademyDictionary = {
     intro:
       "Baue Fähigkeiten in einer klaren Reihenfolge auf und sieh, was als Nächstes freigeschaltet wird.",
     activePaths: "Aktive Lernpfade",
+    roadmap: "Roadmap",
+    roadmapIntro:
+      "Diese Pfade sind geplant, enthalten aber noch keine freigegebenen Lektionen.",
+    planned: "Geplant",
     skillMap: "Skill Map",
     available: "Verfügbar",
     current: "Aktuell",
@@ -638,6 +645,10 @@ const sl: AcademyDictionary = {
     title: "Učne poti",
     intro: "Gradi znanje v jasnem zaporedju in vidi, kaj se odklene naslednje.",
     activePaths: "Aktivne učne poti",
+    roadmap: "Načrt razvoja",
+    roadmapIntro:
+      "Te poti so načrtovane, vendar še nimajo objavljenih učnih vsebin.",
+    planned: "Načrtovano",
     skillMap: "Zemljevid veščin",
     available: "Na voljo",
     current: "Trenutno",
@@ -898,6 +909,10 @@ const en: AcademyDictionary = {
     title: "Learning paths",
     intro: "Build skills in a clear sequence and see what unlocks next.",
     activePaths: "Active learning paths",
+    roadmap: "Roadmap",
+    roadmapIntro:
+      "These paths are planned but do not yet contain released lessons.",
+    planned: "Planned",
     skillMap: "Skill map",
     available: "Available",
     current: "Current",
