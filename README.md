@@ -224,3 +224,11 @@ Deploy migration first, then API, then frontend. See `PRODUCTION_RUNBOOK.md`. Th
 Full-Stack Developer · IT & Finance
 
 [flegardev@gmail.com](mailto:flegardev@gmail.com) · [GitHub](https://github.com/flegardev)
+
+
+## Portfolio & Source Rights
+
+This project is part of the [Tini Flegar Software Engineering Portfolio](https://github.com/flegardev/flegartech-site).
+
+The source code is publicly visible for portfolio review and demonstration. For usage terms and rights, please see [PORTFOLIO_USE.md](PORTFOLIO_USE.md).
+
