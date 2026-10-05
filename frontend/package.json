@@ -26,7 +26,7 @@
     "katex": "^0.18.1",
     "lightweight-charts": "^5.2.0",
     "lucide-react": "^0.468.0",
-    "next": "16.2.12",
+    "next": "16.3.8",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-hook-form": "^7.84.0",
@@ -45,7 +45,7 @@
     "@vitest/coverage-v8": "4.1.10",
     "axe-core": "4.12.1",
     "eslint": "^9.18.0",
-    "eslint-config-next": "16.2.12",
+    "eslint-config-next": "16.3.8",
     "jsdom": "^30.0.0",
     "prettier": "^3.4.2",
     "tailwindcss": "^4.1.12",
@@ -54,6 +54,6 @@
   },
   "overrides": {
     "postcss": "8.5.23",
-    "sharp": "0.35.3"
+    "sharp": "0.35.4"
   }
 }
