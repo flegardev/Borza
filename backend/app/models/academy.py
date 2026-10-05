@@ -213,6 +213,7 @@ class QuestionResponse(Base):
             name="fk_question_responses_attempt_owner",
         ),
         UniqueConstraint("attempt_id", "question_id", name="uq_question_response_attempt_question"),
+        Index("ix_question_responses_attempt_owner_fk", "attempt_id", "user_id"),
         Index("ix_question_responses_user_created", "user_id", "created_at"),
     )
 
@@ -261,6 +262,7 @@ class FlashcardReview(Base):
             name="fk_flashcard_reviews_schedule_owner",
         ),
         CheckConstraint("rating BETWEEN 1 AND 4", name="ck_flashcard_reviews_rating"),
+        Index("ix_flashcard_reviews_schedule_owner_fk", "schedule_id", "user_id"),
         Index("ix_flashcard_reviews_user_reviewed", "user_id", "reviewed_at"),
     )
 
@@ -359,6 +361,7 @@ class SimulationOrder(Base):
             "status IN ('pending', 'filled', 'cancelled', 'rejected')", name="ck_sim_orders_status"
         ),
         CheckConstraint("quantity > 0", name="ck_sim_orders_quantity"),
+        Index("ix_simulation_orders_session_owner_fk", "session_id", "user_id"),
         Index("ix_simulation_orders_session_status", "session_id", "status"),
     )
 
@@ -397,6 +400,8 @@ class SimulationTrade(Base):
         ),
         CheckConstraint("side IN ('long', 'short')", name="ck_sim_trades_side"),
         CheckConstraint("quantity > 0", name="ck_sim_trades_quantity"),
+        Index("ix_simulation_trades_entry_order_owner_fk", "entry_order_id", "user_id"),
+        Index("ix_simulation_trades_session_owner_fk", "session_id", "user_id"),
         Index("ix_simulation_trades_session_closed", "session_id", "closed_at"),
         Index("ix_simulation_trades_user_closed", "user_id", "closed_at"),
     )
@@ -429,6 +434,7 @@ class TradingJournal(Base):
             ["simulation_sessions.id", "simulation_sessions.user_id"],
             name="fk_trading_journals_session_owner",
         ),
+        Index("ix_trading_journals_session_owner_fk", "simulation_session_id", "user_id"),
         Index("ix_trading_journals_user_created", "user_id", "created_at"),
     )
 
@@ -484,6 +490,8 @@ class TradingJournalTag(Base):
             ondelete="CASCADE",
             name="fk_trading_journal_tags_tag_owner",
         ),
+        Index("ix_trading_journal_tags_journal_owner_fk", "journal_id", "user_id"),
+        Index("ix_trading_journal_tags_tag_owner_fk", "tag_id", "user_id"),
     )
 
     journal_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
@@ -684,6 +692,11 @@ class ClassroomResponse(Base):
         ),
         UniqueConstraint("participant_id", "item_id", name="uq_classroom_response_item"),
         CheckConstraint("process_score BETWEEN 0 AND 100", name="ck_classroom_response_score"),
+        Index(
+            "ix_classroom_responses_participant_session_fk",
+            "participant_id",
+            "classroom_session_id",
+        ),
         Index("ix_classroom_responses_session_created", "classroom_session_id", "created_at"),
     )
 
