@@ -10,6 +10,7 @@ visible to database tooling and resilient to future privilege drift.
 """
 
 import sqlalchemy as sa
+
 from alembic import op
 
 revision = "0019"
