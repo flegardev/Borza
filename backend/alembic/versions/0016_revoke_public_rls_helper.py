@@ -11,6 +11,7 @@ plain PostgreSQL used by CI.
 """
 
 import sqlalchemy as sa
+
 from alembic import op
 
 revision = "0016"
