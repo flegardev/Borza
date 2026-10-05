@@ -11,6 +11,7 @@ owner-scoped authenticated policies.
 """
 
 import sqlalchemy as sa
+
 from alembic import op
 
 revision = "0018"
