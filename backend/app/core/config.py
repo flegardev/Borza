@@ -8,6 +8,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from sqlalchemy.engine import make_url
 
 DEPLOYED_ENVIRONMENTS = frozenset({"preview", "staging", "production"})
+DEFAULT_CLASSROOM_CODE_SECRET = "local-development-classroom-secret-change-me"
 ROOT_ENV_FILE = Path(__file__).resolve().parents[3] / ".env"
 DEFAULT_CONTENT_REGISTRY = (
     Path(__file__).resolve().parents[3] / "content" / "academy" / "registry.json"
@@ -44,7 +45,9 @@ def normalize_database_url(value: str, *, deployed: bool) -> str:
 class Settings(BaseSettings):
     """Server-side Academy configuration."""
 
-    model_config = SettingsConfigDict(env_file=ROOT_ENV_FILE, extra="ignore")
+    model_config = SettingsConfigDict(
+        env_file=ROOT_ENV_FILE, extra="ignore", hide_input_in_errors=True
+    )
 
     app_name: str = "Borza Academy"
     environment: Literal["development", "test", "preview", "staging", "production"] = "development"
@@ -69,7 +72,7 @@ class Settings(BaseSettings):
     supabase_url: str | None = None
     supabase_publishable_key: str | None = Field(default=None, max_length=1024)
     supabase_auth_timeout_seconds: float = Field(5, ge=1, le=20)
-    classroom_code_secret: SecretStr = SecretStr("local-development-classroom-secret-change-me")
+    classroom_code_secret: SecretStr = SecretStr(DEFAULT_CLASSROOM_CODE_SECRET)
     classroom_retention_days: int = Field(30, ge=1, le=365)
     partnership_retention_days: int = Field(180, ge=30, le=730)
     mentor_enabled: bool = False
@@ -128,8 +131,12 @@ class Settings(BaseSettings):
             raise ValueError(
                 "SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY are required in deployed environments"
             )
-        if deployed and len(self.classroom_code_secret.get_secret_value()) < 32:
-            raise ValueError("CLASSROOM_CODE_SECRET must contain at least 32 characters")
+        if deployed:
+            classroom_secret = self.classroom_code_secret.get_secret_value().strip()
+            if classroom_secret == DEFAULT_CLASSROOM_CODE_SECRET:
+                raise ValueError("CLASSROOM_CODE_SECRET must override the development default")
+            if len(classroom_secret) < 32:
+                raise ValueError("CLASSROOM_CODE_SECRET must contain at least 32 characters")
         if self.mentor_enabled and not self.openai_api_key:
             raise ValueError("OPENAI_API_KEY is required when MENTOR_ENABLED=true")
         return self
